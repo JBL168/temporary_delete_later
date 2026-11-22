@@ -15,9 +15,18 @@ function getSlot(roomName, time) {
 
 function bookRoom(roomName, time, student) {
   const slot = getSlot(roomName, time);
+  if (slot.taken) return null;
   slot.taken = true;
   slot.bookedBy = student;
   return slot;
 }
 
-module.exports = { rooms, getSlot, bookRoom };
+function cancelBooking(roomName, time, student) {
+  const slot = getSlot(roomName, time);
+  if (slot.bookedBy !== student) return false;
+  slot.taken = false;
+  slot.bookedBy = null;
+  return true;
+}
+
+module.exports = { rooms, getSlot, bookRoom, cancelBooking };
